@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,15 +27,12 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.dom4j.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件处理工具类
- * 
+ *
  * @author carnival
  */
 @Slf4j
@@ -241,7 +237,7 @@ public class FileUtils {
 
     /**
      * 输出指定文件的byte数组
-     * 
+     *
      * @param filePath 文件路径
      * @param os 输出流
      * @return
@@ -279,56 +275,77 @@ public class FileUtils {
      * cast xml to list
      * @return
      */
-    public static List<Map<String,Object>> castXmlToList(String fileName) throws IOException {
+    public static List<Map.Entry<String, Object>> castXmlToMap(String fileName) throws IOException {
         InputStream inputStream = new FileInputStream(new File(fileName));
-        String xml = IOUtils.toString(inputStream);
-        List<Map<String,Object>> mapList = new ArrayList<>();
-        Map<String,Object> retMap = new HashMap<>();
-        try {
-            SAXReader reader = new SAXReader();
-            InputStream targetStream = IOUtils.toInputStream(xml, StandardCharsets.UTF_8.name());
-            Document document = reader.read(targetStream);
-            Element rootElement = document.getRootElement();
-            StringBuilder builder = new StringBuilder();
-            mapList = parser(rootElement, builder, null, retMap);
-        }catch (Exception ex){
-            ex.printStackTrace();
+        String xmlStr = IOUtils.toString(inputStream);
+        List<Map<String, String>> resultList = iterateWholeXML(xmlStr);
+        Map<String, Object> retMap = new HashMap<String, Object>();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < resultList.size(); i++) {
+            Map<String,Object> map = (Map)resultList.get(i);
+            for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
+                String key = (String) iterator.next();
+                retMap.put(key, map.get(key));
+            }
         }
-        return mapList;
+        List<Map.Entry<String, Object>> entryList = retMap.entrySet().stream().collect(Collectors.toList());
+        return entryList;
     }
 
     /**
-     * xml递归解析器
-     * @param ele 解析节点
-     * @param eleKey 上级节点key
-     * @param retMap 返回map
+     * 递归解析任意的xml 遍历每个节点和属性
+     *
+     * @param xmlStr
      */
-    private static List<Map<String,Object>> parser(Element ele, StringBuilder eleKey, String firstEleName, Map<String,Object> retMap){
-        List<Map<String,Object>> list = new ArrayList<>();
-        StringBuilder builder = new StringBuilder(eleKey.toString());
-        if(StringUtils.isEmpty(firstEleName)
-                || firstEleName.equals(ele.getName())){
-            firstEleName = null;
-            builder.append("->"+ele.getName());
-            if(StringUtils.isNotEmpty(StringUtils.stripToEmpty(ele.getData()+""))){
-                retMap.put(builder.toString(), StringUtils.stripToEmpty(ele.getData()+""));
+    private static List<Map<String, String>> iterateWholeXML(String xmlStr) {
+
+        List<Map<String, String>> list = new ArrayList();
+
+        try {
+            Document document = DocumentHelper.parseText(xmlStr);
+            Element root = document.getRootElement();
+            recursiveNode(root, list);
+            return list;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 递归遍历所有的节点获得对应的值
+     *
+     * @param
+     */
+    private static void recursiveNode(Element root, List<Map<String, String>> list) {
+
+        // 遍历根结点的所有孩子节点
+        HashMap<String, String> map = new HashMap();
+        for (Iterator iter = root.elementIterator(); iter.hasNext();) {
+            Element element = (Element) iter.next();
+            if (element == null)
+                continue;
+            // 获取属性和它的值
+            for (Iterator attrs = element.attributeIterator(); attrs.hasNext();) {
+                Attribute attr = (Attribute) attrs.next();
+                if (attr == null)
+                    continue;
+                String attrName = attr.getName();
+                String attrValue = attr.getValue();
+
+                map.put(attrName, attrValue);
             }
-            List<Attribute> attributes = ele.attributes();
-            for (Attribute attribute : attributes) {
-                StringBuilder builder1 = new StringBuilder(builder.toString());
-                builder1.append("=>"+attribute.getName());
-                if(StringUtils.isNotEmpty(attribute.getValue())){
-                    retMap.put(builder1.toString(),attribute.getValue());
-                    list.add(retMap);
-                }
+            // 如果有PCDATA，则直接提出
+            if (element.isTextOnly()) {
+                String innerName = element.getName();
+                String innerValue = element.getText();
+                map.put(innerName, innerValue);
+                list.add(map);
+            } else {
+                // 递归调用
+                recursiveNode(element, list);
             }
         }
-        Iterator iterator1 = ele.elementIterator();
-        while (iterator1.hasNext()){
-            Element eleChild = (Element) iterator1.next();
-            parser(eleChild,builder,firstEleName,retMap);
-        }
-        return list;
     }
 
 
@@ -373,7 +390,7 @@ public class FileUtils {
 
     /**
      * 删除文件
-     * 
+     *
      * @param filePath 文件
      * @return
      */
@@ -391,7 +408,7 @@ public class FileUtils {
 
     /**
      * 文件名称验证
-     * 
+     *
      * @param filename 文件名称
      * @return true 正常 false 非法
      */
@@ -402,7 +419,7 @@ public class FileUtils {
 
     /**
      * 检查文件是否可下载
-     * 
+     *
      * @param resource 需要下载的文件
      * @return true 正常 false 非法
      */
@@ -426,7 +443,7 @@ public class FileUtils {
 
     /**
      * 下载文件名重新编码
-     * 
+     *
      * @param request 请求对象
      * @param fileName 文件名
      * @return 编码后的文件名
@@ -496,7 +513,7 @@ public class FileUtils {
 
     /**
      * 获取图像后缀
-     * 
+     *
      * @param photoByte 图像数据
      * @return 后缀名
      */
@@ -525,7 +542,7 @@ public class FileUtils {
 
     /**
      * 获取文件名称 /profile/upload/2022/04/16/carnival.png -- carnival.png
-     * 
+     *
      * @param fileName 路径名称
      * @return 没有文件路径的名称
      */
@@ -543,7 +560,7 @@ public class FileUtils {
 
     /**
      * 获取不带后缀文件名称 /profile/upload/2022/04/16/carnival.png -- carnival
-     * 
+     *
      * @param fileName 路径名称
      * @return 没有文件路径和后缀的名称
      */
