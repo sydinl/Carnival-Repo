@@ -10,6 +10,7 @@
     <name>process-auto</name>
     <description>Demo project for Spring Boot</description>
 
+
     <modules>
 <!--        <module>system</module>-->
         <module>common</module>
