@@ -20,12 +20,6 @@ public class ExtractDataFromDBController {
     @Autowired
     private ExtractDataService extractDataService;
 
-    @GetMapping("/extractDatafromDB")
-    public List<User> extractDatafromDB(String fields){
-        List<User> userList = extractDataService.loadData();
-        return userList;
-    }
-
     /**
      * Get all tables from DB
      * @return

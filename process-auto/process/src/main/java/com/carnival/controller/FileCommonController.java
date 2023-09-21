@@ -7,10 +7,6 @@ import com.carnival.common.core.domain.AjaxResult;
 import com.carnival.common.utils.StringUtils;
 import com.carnival.common.utils.file.FileUploadUtils;
 import com.carnival.common.utils.file.FileUtils;
-import com.carnival.common.utils.poi.ExcelUtil;
-import com.carnival.dao.ExtractDataDao;
-import com.carnival.domain.User;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +24,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/file")
-public class FileController {
+public class FileCommonController {
 
-    private static final Logger log = LoggerFactory.getLogger(FileController.class);
+    private static final Logger log = LoggerFactory.getLogger(FileCommonController.class);
 
     @Autowired
     private ServerConfig serverConfig;
