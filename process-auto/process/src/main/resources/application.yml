@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+carnival:
+  profile: E:/Java/project/hackthon/testResult
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/carnival?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: 585512
+  #login
+  security:
+    user:
+      name: admin
+      password: admin
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    call-setters-on-nulls: true
+#  mapper-locations: classpath:mapper/*.xml
+
+
+redis:
+  # 地址
+  host: localhost
+  # 端口，默认为6379
+  port: 6379
+  # 数据库索引
+  database: 0
+  # 密码
+  password: 585512
+  # 连接超时时间
+  timeout: 10s
+
