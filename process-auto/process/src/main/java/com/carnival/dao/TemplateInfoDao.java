@@ -12,6 +12,8 @@ public interface TemplateInfoDao extends BaseMapper<TemplateInfo> {
 
     void saveTemplateInfo(TemplateInfo templateInfo);
 
-    @Select("select * from template_info where template_name=#{templateName}")
-    TemplateInfo selectByTemplateName(String templateName);
+    @Select("select my_row_id from template_info;")
+    List<TemplateInfo> selectAll();
+
+    TemplateInfo selectTemplateData(String templateName);
 }

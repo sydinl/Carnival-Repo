@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class TemplateMapping {
 
@@ -20,18 +18,8 @@ public class TemplateMapping {
 
     private String descField;
 
-    private String destField;
-
     private String filterOps;
 
     private String filterCondition;
-
-
-    private String value;
-
-
-
-    private List<Filter> filters;
-
 
 }

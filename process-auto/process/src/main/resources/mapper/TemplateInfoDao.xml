@@ -19,6 +19,8 @@
         <result property="sourceField"     column="source_field"    />
         <result property="transferLogic"     column="transfer_logic"    />
         <result property="descField"        column="desc_field"        />
+        <result property="filterOps"        column="filter_ops"        />
+        <result property="filterCondition"        column="filter_condition"        />
     </resultMap>
 
     <insert id="saveTemplateInfo" parameterType="com.carnival.domain.TemplateInfo" >

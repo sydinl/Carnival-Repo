@@ -13,6 +13,12 @@
         <result property="filterCondition"        column="filter_condition"        />
     </resultMap>
 
+    <select id="selectTemplateMappingData" parameterType="String" resultMap="TemplateMappingResult">
+        select my_row_id,template_name,source_field,transfer_logic,desc_field,filter_ops,filter_condition
+        from template_mapping
+        where template_name = #{template_name}
+    </select>
+
     <insert id="saveTemplateMapping" parameterType="com.carnival.domain.TemplateMapping" >
         insert into template_mapping(
             my_row_id,
@@ -25,13 +31,13 @@
         )values
         <foreach collection="list" item="item" separator=",">
             (
-            #{item.myRowId},
-            #{item.templateName},
-            #{item.sourceField},
-            #{item.transferLogic},
-            #{item.descField},
-            #{item.filterOps},
-            #{item.filterCondition}
+             #{item.myRowId},
+             #{item.templateName},
+             #{item.sourceField},
+             #{item.transferLogic},
+             #{item.descField},
+             #{item.filterOps},
+             #{item.filterCondition}
             )
         </foreach>
     </insert>
