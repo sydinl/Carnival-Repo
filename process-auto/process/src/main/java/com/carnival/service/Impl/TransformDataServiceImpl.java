@@ -29,4 +29,13 @@ public class TransformDataServiceImpl implements TransformDataService {
         templateInfoDao.saveTemplateInfo(templateInfo);
         templateMappingDao.saveTemplateMapping(templateInfo.getSrcfields());
     }
+
+    @Override
+    @Transactional
+    public TemplateInfo getTemplate(String templateName) {
+        TemplateInfo t=templateInfoDao.selectByTemplateName(templateName);
+        t.setSrcfields(templateMappingDao.getTemplateMappingsByTMName(templateName));
+        return t;
+    }
+
 }

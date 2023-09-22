@@ -20,6 +20,8 @@ public class TemplateMapping {
 
     private String descField;
 
+    private String destField;
+
     private String filterOps;
 
     private String filterCondition;
@@ -27,9 +29,7 @@ public class TemplateMapping {
 
     private String value;
 
-    private String filterOps;
 
-    private String filterCondition;
 
     private List<Filter> filters;
 

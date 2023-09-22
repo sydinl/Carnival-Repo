@@ -26,6 +26,8 @@ public class TransformDataController {
 
     void convertData(TemplateInfo templateInfo){
         for(TemplateMapping tm:templateInfo.getSrcfields()){
+            tm.setTemplateName(templateInfo.getTemplateName());
+            tm.setDescField(tm.getDestField());
             tm.setSourceField(tm.getValue());
             tm.setFilterOps(tm.getFilters().get(0).getType());
             tm.setFilterCondition(tm.getFilters().get(0).getValue());
