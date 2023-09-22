@@ -28,4 +28,5 @@ public class ExtractDataServiceImpl implements ExtractDataService {
     public List<String> getAllColumns(String tableName) {
         return extractDataDao.getAllColumns(tableName);
     }
+
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.carnival.dao.TemplateInfoDao">
+
+    <resultMap type="com.carnival.domain.TemplateInfo" id="TemplateInfoResult">
+        <id     property="myRowId"       column="my_row_id"      />
+        <result property="sourceEnd"       column="source_end"      />
+        <result property="source"     column="source"    />
+        <result property="destination"     column="destination"    />
+        <result property="destinationEnd"        column="destination_end"        />
+        <result property="templateName"  column="template_name"  />
+        <collection  property="srcfields"   javaType="java.util.List"    resultMap="TemplateMappingResult" />
+    </resultMap>
+
+    <resultMap type="com.carnival.domain.TemplateMapping" id="TemplateMappingResult">
+        <id     property="myRowId"       column="my_row_id"      />
+        <result property="templateName"       column="template_name"      />
+        <result property="sourceField"     column="source_field"    />
+        <result property="transferLogic"     column="transfer_logic"    />
+        <result property="descField"        column="desc_field"        />
+    </resultMap>
+
+    <insert id="saveTemplateInfo" parameterType="com.carnival.domain.TemplateInfo" >
+        insert into template_info(
+            my_row_id, source_end, destination, source, destination_end, template_name
+        )values(
+            #{myRowId}, #{sourceEnd}, #{destination}, #{source}, #{destinationEnd}, #{templateName}
+        )
+    </insert>
+
+
+</mapper>
