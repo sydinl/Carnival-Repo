@@ -9,15 +9,29 @@
         <result property="sourceField"     column="source_field"    />
         <result property="transferLogic"     column="transfer_logic"    />
         <result property="descField"        column="desc_field"        />
+        <result property="filterOps"        column="filter_ops"        />
+        <result property="filterCondition"        column="filter_condition"        />
     </resultMap>
 
     <insert id="saveTemplateMapping" parameterType="com.carnival.domain.TemplateMapping" >
         insert into template_mapping(
-            my_row_id, template_name, source_field, transfer_logic, desc_field
+            my_row_id,
+            template_name,
+            source_field,
+            transfer_logic,
+            desc_field,
+            filter_ops,
+            filter_condition
         )values
         <foreach collection="list" item="item" separator=",">
             (
-            #{item.myRowId}, #{item.templateName}, #{item.sourceField}, #{item.transferLogic}, #{item.descField}
+            #{item.myRowId},
+            #{item.templateName},
+            #{item.sourceField},
+            #{item.transferLogic},
+            #{item.descField},
+            #{item.filterOps},
+            #{item.filterCondition}
             )
         </foreach>
     </insert>
