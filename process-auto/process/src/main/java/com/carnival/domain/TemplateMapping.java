@@ -18,4 +18,9 @@ public class TemplateMapping {
 
     private String descField;
 
+    private String filterOps;
+
+    private String filterCondition;
+
+
 }
