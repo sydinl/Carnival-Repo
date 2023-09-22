@@ -41,6 +41,7 @@ async function main() {
     startPosition: earliestEventPosition
   };
 
+  
   const subscription = client.subscribe(
     {
       processEvents: async (events, context) => {
@@ -52,6 +53,7 @@ async function main() {
           if(Array.isArray(res)&&res.length==3){
             setChartData([...res])
           }
+          
           await context.updateCheckpoint(events[events.length - 1])
       },
       processError: async (err, context) => {

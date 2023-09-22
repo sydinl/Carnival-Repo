@@ -38,8 +38,8 @@ public class TriggerServiceImpl implements TriggerService {
             TemplateConfig templateConfig = new TemplateConfig(templateInfo, templateMappings);
             InboundAdapter inboundAdapter = inboundAdapterMap.get(templateInfo.getSourceEnd());
             OutBoundAdpter outBoundAdpter = outBoundAdpterMap.get(templateInfo.getDestinationEnd());
-            Object o = inboundAdapter.processInbound(templateConfig);
-            outBoundAdpter.processOutbound(templateConfig, o);
+            List<Map<String, Object>> mapList = inboundAdapter.processInbound(templateConfig);
+            outBoundAdpter.processOutbound(templateConfig, mapList);
         });
     }
 }

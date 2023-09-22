@@ -1,14 +1,16 @@
 package com.carnival.endpoint;
 
 import com.carnival.config.TemplateConfig;
-import com.carnival.endpoint.Endpoint;
+
+import java.util.List;
+import java.util.Map;
 
 public abstract class InboundAdapter implements Endpoint {
 
 
 
 
-    public Object processInbound(TemplateConfig config){
+    public List<Map<String,Object>> processInbound(TemplateConfig config){
         return null;
     }
 
