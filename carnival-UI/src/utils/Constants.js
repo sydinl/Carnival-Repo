@@ -7,8 +7,10 @@ const DOLOGIN = "/doLogin"
 const GETAUTH = "/getAuthentication"
 const LOGOUT = "/logoff.jsp"
 const GETENV = "/getEnv"
-const GETTBLIST = "/getTableList"
-const GETCOLUMNLIST="/getColumnList"
+const GETTBLIST = "/extractDBData/getAllTables"
+const GETCOLUMNLIST = "/extractDBData/getAllColumns"
+const SAVETEMPLATE = "/transformData/saveDataToDB"
+const TRIGGERTEMPLATE = "/trigger"
 const COMMON_ACCESS = []
 const ROLES_ACCESS = {
     READONLY: [...COMMON_ACCESS],
@@ -22,13 +24,15 @@ const PAGE_PATH = {
     LOGOUT: LOGOUT,
 }
 
-const BACK_PATH={
-    DOLOGIN: DOLOGIN,
+const BACK_PATH = {
+    DOLOGIN: LOGIN,
     GETAUTH: GETAUTH,
     LOGOUT: LOGOUT,
     GETENV: GETENV,
     GETTBLIST: GETTBLIST,
     GETCOLUMNLIST: GETCOLUMNLIST,
+    SAVETEMPLATE: SAVETEMPLATE,
+    TRIGGERTEMPLATE: TRIGGERTEMPLATE,
 }
 export {
     PAGE_PATH, All_ACCESS, ROLES_ACCESS, BACK_PATH

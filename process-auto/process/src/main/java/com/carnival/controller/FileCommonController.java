@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/file")
+//@RestController
+//@RequestMapping("/file")
 public class FileCommonController {
 
     private static final Logger log = LoggerFactory.getLogger(FileCommonController.class);

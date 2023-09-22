@@ -2,36 +2,47 @@ package com.carnival.endpoint;
 
 import com.carnival.config.TemplateConfig;
 import com.carnival.entity.TemplateInfo;
+import com.carnival.utils.GsonUtils;
+import com.google.gson.GsonBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import com.azure.messaging.eventhubs.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component("event-hubs")
+@Slf4j
 public class EventHubPubliser extends OutBoundAdpter {
 
     private static final String connectionString = "Endpoint=sb://event-carnival.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Xq9I91MWnh6nnkJ1b6JZaDoZt8t2jJf3l+AEhDnfaF8=";
 
     @Override
-    public Object processOutbound(TemplateConfig config, Object object) {
+    public Object processOutbound(TemplateConfig config, Object target) {
         TemplateInfo templateInfo = config.getTemplateInfo();
         String hub = templateInfo.getDestination();
-        publishEvents(hub, object);
-        return super.processOutbound(config, object);
+        log.info(target.toString());
+        publishEvents(hub, target);
+        return super.processOutbound(config, target);
     }
 
     /**
-     *
      * @throws IllegalArgumentException if the EventData is bigger than the max batch size.
      */
-    public void publishEvents(String eventHubName, Object object) {
+    public void publishEvents(String eventHubName, Object events) {
         // create a producer client
         EventHubProducerClient producer = new EventHubClientBuilder()
                 .connectionString(connectionString, eventHubName)
                 .buildProducerClient();
 
         // sample events in an array
-        List<EventData> allEvents = Arrays.asList(new EventData(object.toString()));
+        List<EventData> allEvents;
+
+        if (events instanceof List) {
+            allEvents = (List<EventData>) ((List) events).stream().map(e -> new EventData(GsonUtils.toJson(e))).collect(Collectors.toList());
+        } else {
+            allEvents = List.of(new EventData(GsonUtils.toJson(events)));
+        }
 
         // create a batch
         EventDataBatch eventDataBatch = producer.createBatch();

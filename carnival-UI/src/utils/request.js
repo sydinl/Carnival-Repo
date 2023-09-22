@@ -11,9 +11,9 @@ let cancel
 request.interceptors.request.use(
     config => {
         config.cancelToken = new axios.CancelToken(c => cancel = c)
-        if (noAuthrized(config.url)) {
-            cancel("no authorized to access")
-        }
+        // if (noAuthrized(config.url)) {
+        //     cancel("no authorized to access")
+        // }
         config.url = PAGE_PATH.ROOT + config.url//add backout rootpath
         config.url = config.url.replace("//", "/")
         console.log("start request")
@@ -56,7 +56,8 @@ request.interceptors.response.use(
                     //expired
                     break;
                 case 404:
-                    window.location.href = "/404"
+                    // window.location.href = "/404"
+                    alert("return 404")
                     break;
                 default:
                     console.log(error.response)

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Service
 @Slf4j
@@ -21,6 +22,7 @@ public class TriggerServiceImpl implements TriggerService {
 
 
     SyncTaskExecutor executor = new SyncTaskExecutor();
+
 
     @Autowired
     Map<String, InboundAdapter> inboundAdapterMap;

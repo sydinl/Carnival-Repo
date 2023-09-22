@@ -5,7 +5,7 @@ const doLogin = (data) => {
     return request({
         url: BACK_PATH.DOLOGIN,
         method: 'post',
-        data: data,
+        params: data,
     })
 }
 

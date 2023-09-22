@@ -1,4 +1,4 @@
-package com.carnival.service.impl;
+package com.carnival.service.Impl;
 
 import com.carnival.entity.TemplateMapping;
 import com.carnival.mapper.TemplateMappingMapper;

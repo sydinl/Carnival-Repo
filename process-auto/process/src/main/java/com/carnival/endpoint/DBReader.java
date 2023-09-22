@@ -36,7 +36,8 @@ public class DBReader extends InboundAdapter {
         for (TemplateMapping templateMapping : templateMappings) {
             String ops = templateMapping.getFilterOps();
             String sourceField = templateMapping.getSourceField();
-            String target = templateMapping.getTransferLogic();
+            queryWrapper.select(sourceField);
+            String target = templateMapping.getFilterCondition();
             switch (ops) {
                 case "eq":
                     queryWrapper.eq(sourceField, target);

@@ -1,15 +1,14 @@
 package com.carnival.service.Impl;
 
-import com.carnival.dao.LoadDataDao;
 import com.carnival.service.LoadDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-@Service
+//@Service
 public class LoadDataServiceImpl implements LoadDataService {
 
-    @Autowired
-    private LoadDataDao loadDataDao;
+//    @Autowired
+//    private LoadDataDao loadDataDao;
 }

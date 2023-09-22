@@ -16,4 +16,5 @@ public abstract class InboundAdapter implements Endpoint {
     public boolean isReady() {
         return false;
     }
+
 }

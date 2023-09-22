@@ -61,9 +61,6 @@ const noAuthrized = (url) => {
     if (All_ACCESS.includes(url)) {
         return false
     }
-    if (url.indexOf(BACK_PATH.DELETEMTENTRY) != -1) {
-        url = BACK_PATH.DELETEMTENTRY
-    }
     let user = getUserInfoBySessionStorage()
     let currentRoles = user ? user.groups : null
     if (currentRoles && currentRoles.length != 0) {

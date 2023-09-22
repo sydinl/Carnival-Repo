@@ -11,6 +11,7 @@ import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-cus
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 import { useEffect, useState } from 'react';
+import { setConfig } from 'next/config';
 
 const now = new Date();
 const randomNums=()=>{
@@ -24,13 +25,60 @@ const randomNums=()=>{
   
   return numbers
 }
+const { EventHubConsumerClient, earliestEventPosition } = require("@azure/event-hubs");
+
+async function main() {
+  
+  const client = new EventHubConsumerClient(
+    "",
+    "Endpoint=sb://event-carnival.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Xq9I91MWnh6nnkJ1b6JZaDoZt8t2jJf3l+AEhDnfaF8=",
+    "carnival-hub02"
+  );
+
+  // In this sample, we use the position of earliest available event to start from
+  // Other common options to configure would be `maxBatchSize` and `maxWaitTimeInSeconds`
+  const subscriptionOptions = {
+    startPosition: earliestEventPosition
+  };
+
+  const subscription = client.subscribe(
+    {
+      processEvents: async (events, context) => {
+
+          let body=events[0].body
+          console.log(body)
+          let res=body[0]
+          console.log(res)
+          if(Array.isArray(res)&&res.length==3){
+            setChartData([...res])
+          }
+          await context.updateCheckpoint(events[events.length - 1])
+      },
+      processError: async (err, context) => {
+        setTimeout(async () => {
+          console.log(err)
+        }, 10 * 1000);
+      }
+    },
+    subscriptionOptions
+  );
+
+  // Wait for a few seconds to receive events before closing
+  setTimeout(async () => {
+    await subscription.close();
+    await client.close();
+    console.log(`Exiting sample`);
+  }, 10 * 1000);
+}
+
+
 const Page = () =>{
   const [chartData,setChartData]=useState([33, 45, 22]);
-  
+  // main()
   useEffect(() => {
     const id = setInterval(() => {
-      setChartData(randomNums())
-    }, 1000)
+      main()
+    }, 5000)
     return () => clearInterval(id)
 }, [chartData])
 
@@ -53,7 +101,7 @@ const Page = () =>{
           container
           spacing={3}
         >
-          <Grid
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -64,8 +112,8 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value="$24k"
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -76,8 +124,8 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value="1.6k"
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -86,8 +134,8 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value={75.5}
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -96,7 +144,7 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value="$15k"
             />
-          </Grid>
+          </Grid> */}
           <Grid
             xs={12}
             lg={8}
@@ -126,11 +174,11 @@ const Page = () =>{
           >
             <OverviewTraffic
               chartSeries={chartData}
-              labels={['Desktop', 'Tablet', 'Phone']}
+              labels={['FXTrade', 'SecurtyTrade', 'Bond']}
               sx={{ height: '100%' }}
             />
           </Grid>
-          <Grid
+          {/* <Grid
             xs={12}
             md={6}
             lg={4}
@@ -170,8 +218,8 @@ const Page = () =>{
               ]}
               sx={{ height: '100%' }}
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             md={12}
             lg={8}
@@ -241,7 +289,7 @@ const Page = () =>{
               ]}
               sx={{ height: '100%' }}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>

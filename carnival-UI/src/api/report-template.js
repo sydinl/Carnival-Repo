@@ -1,3 +1,4 @@
+import { ta } from "date-fns/locale"
 import request from "src/utils/request"
 
 // const { default: request } = require("src/utils/request")
@@ -27,16 +28,33 @@ const { BACK_PATH } = require("src/utils/Constants")
 // }
 const getTableList = (dbName) => {
     return request({
-        url: BACK_PATH.GETTBLIST + "/" + dbName,
+        url: BACK_PATH.GETTBLIST,
         method: 'get',
+        params: { DBName: dbName }
     })
 }
 const getColumnList = (tableName) => {
     return request({
-        urll: BACK_PATH.GETCOLUMNLIST + "/" + tableName,
+        url: BACK_PATH.GETCOLUMNLIST,
         method: 'get',
+        params: { tableName: tableName }
+    })
+}
+
+const triggerTemplate = (templateName) => {
+    return request({
+        url: BACK_PATH.TRIGGERTEMPLATE,
+        method: 'get',
+        params: { templateName: templateName }
+    })
+}
+const saveTemplate = (data) => {
+    return request({
+        url: BACK_PATH.SAVETEMPLATE,
+        method: 'post',
+        data: data
     })
 }
 export {
-    getTableList, getColumnList
+    getTableList, getColumnList, saveTemplate,triggerTemplate
 }

@@ -3,7 +3,7 @@ module.exports =  () => {
     return [
       {
         source: "/iflow/:path*",
-        destination: "http://localhost:8080/iflow/:path*",
+        destination: "http://localhost:8080/:path*",
       },
     ];
   };
